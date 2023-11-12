@@ -160,6 +160,11 @@ if (addDependencies || !project.dependencies.hasOwnProperty('yargs')) {
     pacman.add('yargs');
 }
 
+// Load package.json if it exist originally
+if (packageExist) {
+    pacman.install();
+}
+
 //======================================================================
 // Parse args
 //======================================================================
@@ -210,11 +215,6 @@ const names = fs.existsSync(name) ?
 
 debug_log(pacman);
 debug_log(argv);
-
-// Load package.json if it exist originally
-if (packageExist) {
-    pacman.install();
-}
 
 // Install dependencies
 const jsdom = require("jsdom");
