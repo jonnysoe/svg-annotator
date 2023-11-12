@@ -230,17 +230,15 @@ const annotate = (name, data) => {
     svg = dom.window.document.getElementById(svg.id);
     const width = svg.getAttribute('width');
     const height = svg.getAttribute('height');
-    console.log(width);
-    console.log(height);
 
     // Create text selector
     // https://stackoverflow.com/a/13229110/19336104
     const text = dom.window.document.createElement('text', '');
 
     // Populate text selector
+    let id = 'text';
     {
         let i = 0;
-        let id = 'text';
         do {
             i++;
             id = `text${i}`;
@@ -272,7 +270,9 @@ const annotate = (name, data) => {
 
     // Use inkscape to convert to PNG
     if (cmdExist(INKSCAPE)) {
-        termSync(`${INKSCAPE} ${path.join(OUT, svg_file)} --export-png=${path.join(OUT, file + '.png')}`);
+        // inkscape action guide
+        // https://inkscape.org/forums/beyond/inkscape-12-actions-list/
+        termSync(`${INKSCAPE} ${path.join(OUT, svg_file)} --actions="select-by-id:${id};object-align:hcenter page;export-do" --export-type=png --export-filename=${path.join(OUT, file + '.png')}`);
     }
 };
 
