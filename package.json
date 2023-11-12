@@ -1,0 +1,15 @@
+{
+    "name": "svg-annotator",
+    "version": "1.0.0",
+    "description": "Primitive single-script (JavaScript) to annotate name into SVG image",
+    "main": "svg-annotator.js",
+    "scripts": {
+        "start": "node ."
+    },
+    "author": "jonnysoe",
+    "license": "MIT",
+    "dependencies": {
+        "jsdom": "^22.1.0",
+        "yargs": "^17.7.2"
+    }
+}
