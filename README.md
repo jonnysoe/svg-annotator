@@ -9,6 +9,7 @@ This can usually be helpful to annotate documents like certificates, name cards,
 
 ### Optional
 
+- [inkscape](https://inkscape.org/release)
 - [git](https://git-scm.com/downloads)
 - [cURL](https://curl.se/download.html) - pre-installed on Windows and MacOS; Linux environment could either install curl (`sudo apt install -y curl`) or use the pre-installed [wget](https://www.gnu.org/software/wget/manual/wget.html) as alternative
 - [yarn](https://classic.yarnpkg.com/lang/en/docs/install) (`npm install --global yarn`)
@@ -26,7 +27,7 @@ Script Arguments:
 Check out [sample/names.txt](./sample/names.txt) and [sample/template.svg](./sample/template.svg).
 
 ### Getting Started
-1. Start with either of the following, then `cd`` into the directory.
+1. Start with either of the following, then `cd` into the directory.
     - git clone
         ```
         git clone git@github.com:jonnysoe/svg-annotator.git && cd svg-annotator
@@ -39,7 +40,7 @@ Check out [sample/names.txt](./sample/names.txt) and [sample/template.svg](./sam
 3. Prepare a template svg file by the name `template.svg`.
 4. Run this command:
     ```
-    node svg-annotator.svg
+    node svg-annotator.js
     ```
    Alternatively, can run the following when [package.json](./package.json) is present
     ```
