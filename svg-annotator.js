@@ -170,9 +170,9 @@ if (packageExist) {
 //======================================================================
 // Ignore first 2 arguments <node exetubale> and <script>
 const argv = require('yargs')(process.argv.slice(2))
-    .usage('Usage: $0 -n [name] -t [template]')
+    .usage('Usage: node $0 -n [name] -t [template]')
     .alias('v', 'version')
-    .example('$0 -n "Misaka Mikoto"', 'Annotates template.svg (default template SVG) with "Misaka Mikoto"')
+    .example('node $0 -n "Misaka Mikoto"', 'Annotates template.svg (default template SVG) with "Misaka Mikoto"')
     // Name(s)
     .default('n', 'names.txt')
     .alias('n', 'name')
