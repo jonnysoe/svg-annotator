@@ -218,7 +218,6 @@ debug_log(argv);
 
 // Install dependencies
 const jsdom = require("jsdom");
-const { command } = require('yargs');
 const { JSDOM } = jsdom;
 
 const annotate = (name, data) => {
@@ -259,7 +258,7 @@ const annotate = (name, data) => {
     svg.appendChild(text);
 
     // Modify filename
-    const file = name.replace(/\s/g, '');
+    const file = name.replace(/\s/g, '').replace('\&', '');
     const svg_file = file + '.svg';
     svg.setAttribute('sodipodi:docname', svg_file);
 
@@ -271,8 +270,12 @@ const annotate = (name, data) => {
     // Use inkscape to convert to PNG
     if (cmdExist(INKSCAPE)) {
         // inkscape action guide
+        // https://graphicdesign.stackexchange.com/a/161009
         // https://inkscape.org/forums/beyond/inkscape-12-actions-list/
-        termSync(`${INKSCAPE} ${path.join(OUT, svg_file)} --actions="select-by-id:${id};object-align:hcenter page;export-do" --export-type=png --export-filename=${path.join(OUT, file + '.png')}`);
+        termSync(`${INKSCAPE} --actions="select-by-id:${id};object-align:hcenter page;export-filename:${path.join(OUT, svg_file)};export-do" ${path.join(OUT, svg_file)}`);
+
+        // export to PNG
+        termSync(`${INKSCAPE} ${path.join(OUT, svg_file)} --export-type=png --export-filename=${path.join(OUT, file + '.png')}`);
     }
 };
 
@@ -282,7 +285,9 @@ mkdirSync(OUT);
 // Anotate names into SVG
 const data = fs.readFileSync(template, 'utf8');
 names.forEach((name) => {
-    annotate(name, data);
+    if (!name.startsWith('#')) {
+        annotate(name, data);
+    }
 });
 
 popd();
