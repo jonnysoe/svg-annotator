@@ -34,7 +34,7 @@ Check out [sample/names.txt](./sample/names.txt) and [sample/template.svg](./sam
         ```
     - download the single [svg-annotator.js](./svg-annotator.js) script into a temp directory
         ```
-        mkdir svg-annotator && curl -L -o svg-annotator.js https://raw.githubusercontent.com/jonnysoe/svg-annotator/main/svg-annotator.js && cd svg-annotator
+        mkdir svg-annotator && cd svg-annotator && curl -L -o svg-annotator.js https://raw.githubusercontent.com/jonnysoe/svg-annotator/main/svg-annotator.js
         ```
 2. Prepare name list by the name `names.txt` (separated by new lines) in project root directory.
 3. Prepare a template svg file by the name `template.svg`.
