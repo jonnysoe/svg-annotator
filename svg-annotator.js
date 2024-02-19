@@ -97,9 +97,15 @@ class Pacman {
     }
 
     getPacman = () => {
-        // Tricky part is there is no way to check if script was invoked by npm or yarn,
-        // so this can still override npm invocation to yarn
-        if (fs.existsSync('yarn.lock') || (!fs.existsSync('package-lock.json') && cmdExist('yarn'))) {
+        // Conditions to use yarn as package manager:
+        // - yarn was previously used - yarn.lock is present
+        // - npm was not previously used - package-lock.json is missing
+        // - parent process is either yarn or node - not npm
+        // NOTE: Parent process can be queried by using process.env._ - to derive package manager
+        // https://stackoverflow.com/a/69301988
+        if ((fs.existsSync('yarn.lock') ||
+             !fs.existsSync('package-lock.json') && (path.basename(process.env._) !== 'npm')) &&
+            cmdExist('yarn')) {
             return 'yarn';
         }
         return 'npm';
