@@ -80,7 +80,7 @@ const cmdExist = (command) => {
 //======================================================================
 class Pacman {
     constructor() {
-        this.name = this.getPacman();
+        this.name = this.#getPacman();
 
         // https://www.digitalocean.com/community/tutorials/nodejs-npm-yarn-cheatsheet
         if (this.name === 'yarn') {
@@ -96,13 +96,14 @@ class Pacman {
         }
     }
 
-    getPacman = () => {
+    #getPacman = () => {
         // Conditions to use yarn as package manager:
         // - yarn was previously used - yarn.lock is present
         // - npm was not previously used - package-lock.json is missing
         // - parent process is either yarn or node - not npm
-        // NOTE: Parent process can be queried by using process.env._ - to derive package manager
-        // https://stackoverflow.com/a/69301988
+        // NOTE: Parent process can be queried by using process.env.npm_execpath - to derive package manager.
+        //       However, only `npm` defined `npm_command`, need to check if behavior is the same for pnpm.
+        // https://stackoverflow.com/a/51793644
         if ((fs.existsSync('yarn.lock') ||
              !fs.existsSync('package-lock.json') && (path.basename(process.env._) !== 'npm')) &&
             cmdExist('yarn')) {
@@ -275,6 +276,8 @@ const annotate = (name, data) => {
 
     // Use inkscape to convert to PNG
     if (cmdExist(INKSCAPE)) {
+        ///@todo need to check for inkscape version, older versions does not have --actions
+        //       or if argument options exists in --help
         // inkscape action guide
         // https://graphicdesign.stackexchange.com/a/161009
         // https://inkscape.org/forums/beyond/inkscape-12-actions-list/
