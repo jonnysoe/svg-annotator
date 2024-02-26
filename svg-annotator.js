@@ -97,19 +97,35 @@ class Pacman {
     }
 
     #getPacman = () => {
-        // Conditions to use yarn as package manager:
-        // - yarn was previously used - yarn.lock is present
-        // - npm was not previously used - package-lock.json is missing
-        // - parent process is either yarn or node - not npm
+        // Preference order of package manager:
+        // - pnpm
+        // - yarn
+        // - npm
         // NOTE: Parent process can be queried by using process.env.npm_execpath - to derive package manager.
         //       However, only `npm` defined `npm_command`, need to check if behavior is the same for pnpm.
         // https://stackoverflow.com/a/51793644
-        if ((fs.existsSync('yarn.lock') ||
-             !fs.existsSync('package-lock.json') && (path.basename(process.env._) !== 'npm')) &&
-            cmdExist('yarn')) {
-            return 'yarn';
+        const exec = path.basename(process.env.npm_execpath ?? "", ".exe");
+
+        switch (exec) {
+            case "yarn.js":
+                return "yarn";
+            case "pnpm":
+                return "pnpm";
+            case "npm-cli.js":
+                return "npm";
+            default:
+                const yarnExist = cmdExist("yarn");
+                const pnpmExist = cmdExist("pnpm");
+                return fs.existsSync("pnpm-lock.yaml") && pnpmExist
+                    ? "pnpm"
+                    : fs.existsSync("yarn.lock") && yarnExist
+                    ? "yarn"
+                    : pnpmExist
+                    ? "pnpm"
+                    : yarnExist
+                    ? "yarn"
+                    : "npm";
         }
-        return 'npm';
     };
 
     install = () => {
@@ -124,6 +140,9 @@ class Pacman {
 //======================================================================
 // Script Entry
 //======================================================================
+const script = path.basename(__filename);
+const timed = `Total time for ${script}`;
+console.time(timed);
 pushd(__dirname);
 
 // Check dependencies
@@ -134,7 +153,6 @@ if (!cmdExist(INKSCAPE)) {
 }
 
 // Prepare default package.json, variable cannot use package as name
-const script = path.basename(__filename);
 let project = {
     name: `${path.basename(script, path.extname(script))}`,
     version: '1.0.0',
@@ -300,5 +318,7 @@ names.forEach((name) => {
 });
 
 popd();
+
+console.timeEnd(timed);
 
 process.exit(0);
