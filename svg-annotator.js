@@ -97,21 +97,18 @@ class Pacman {
     }
 
     #getPacman = () => {
-        // Preference order of package manager:
-        // - pnpm
-        // - yarn
-        // - npm
+        // Preference order of package manager: pnpm > yarn > npm
         // NOTE: Parent process can be queried by using process.env.npm_execpath - to derive package manager.
-        //       However, only `npm` defined `npm_command`, need to check if behavior is the same for pnpm.
         // https://stackoverflow.com/a/51793644
-        const exec = path.basename(process.env.npm_execpath ?? "", ".exe");
+        const exec = path.basename(process.env.npm_execpath ?? "").split(".").shift();
 
         switch (exec) {
-            case "yarn.js":
+            case "yarn":
                 return "yarn";
             case "pnpm":
+                // 2 main extensions, pnpm.exe (none in UNIX) vs pnpm.cjs
                 return "pnpm";
-            case "npm-cli.js":
+            case "npm-cli":
                 return "npm";
             default:
                 const yarnExist = cmdExist("yarn");
